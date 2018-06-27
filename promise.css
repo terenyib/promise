@@ -1,0 +1,56 @@
+* {
+    box-sizing: border-box;
+    font-family: Verdana,sans-serif;    
+}
+
+#doboz {
+	width: 600px;
+    padding: 25px;    
+}
+
+#eredmeny {
+	width: 600px;
+    padding: 25px;    
+}
+
+h1 {
+    display: block;
+    font-size: 1.9em;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0.67em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+.header {
+    background-color: #6495ED;
+    padding: 30px 40px;
+    color: white;
+    text-align: center;
+}
+
+.header:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+input {
+    border: none;
+    width: 65%;
+    padding: 10px;
+    float: left;
+    font-size: 16px;    
+}
+
+#keresgomb {
+    padding: 10px;
+    width: 35%;
+    background: #00FF7F;
+    float: left;    
+}
+
+#keresgomb:hover {
+    background-color: #00b300;
+}
