@@ -18,6 +18,10 @@ V = (function () {
         bevitelimezoTorles: function () {
             document.getElementById('nev').value = '';
         },
+        
+        kiIras: function (talalat) {
+            document.getElementById('eredmeny').innerHTML = 'name=' + talalat.results[0].nameFull + '<br />' + 'serial=' + talalat.results[0].uid + '<br />' + 'email=' + talalat.results[0].mail[0] + '<br />' + 'notesmail=' + talalat.results[0].notesEmail;
+        },
     };
 })();
 
@@ -28,8 +32,7 @@ C = (function (MObj, VObj) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    var obj = JSON.parse(this.responseText);
-                    document.getElementById('eredmeny').innerHTML = 'name=' + JSON.stringify(obj.results[0].nameFull) + '<br />' + 'serial=' + JSON.stringify(obj.results[0].uid) + '<br />' + 'email=' + JSON.stringify(obj.results[0].mail[0]) + '<br />' + 'notesmail=' + JSON.stringify(obj.results[0].notesEmail);                        
+                    VObj.kiIras(JSON.parse(this.responseText));                                           
                 }
             };
             xhttp.open('GET', 'https://w3-services1.w3-969.ibm.com/myw3/unified-profile/v1/search/user?query=' + keresettNev + '&rows=1&searchConfig=optimized_search', true);
