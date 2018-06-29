@@ -29,14 +29,24 @@ C = (function (MObj, VObj) {
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
         if (keresettNev != '') {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    VObj.kiIras(JSON.parse(this.responseText));                                           
-                }
-            };
-            xhttp.open('GET', 'https://w3-services1.w3-969.ibm.com/myw3/unified-profile/v1/search/user?query=' + keresettNev + '&rows=1&searchConfig=optimized_search', true);
-            xhttp.send();
+            var promiseObj = new Promise(function(resolve, reject){
+                var xhttp = new XMLHttpRequest();
+                xhttp.open('GET', 'https://w3-services1.w3-969.ibm.com/myw3/unified-profile/v1/search/user?query=' + keresettNev + '&rows=1&searchConfig=optimized_search', true);
+                xhttp.send();
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState === 4){
+                        if (xhttp.status === 200){                                                       
+                            resolve(VObj.kiIras(JSON.parse(this.responseText)));
+                            console.log("xhr done successfully");
+                        } else {
+                           reject(xhttp.status);
+                           console.log("xhr failed");
+                        }
+                     } else {
+                        console.log("xhr processing going on");
+                     }
+                }  
+            });
         } else {
             alert('Nem írtál be nevet!');
         }
