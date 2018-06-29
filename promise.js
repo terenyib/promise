@@ -75,8 +75,11 @@ C = (function (MObj, VObj) {
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
         if (keresettNev != '') {
-            makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler)
-            .then(processBpResponse, errorHandler);
+            makeAjaxCall(urlKeszito(keresettNev)).then(function(){
+                processBpResponse;
+                makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
+            }, errorHandler);
+            
         } else {
             alert('Nem írtál be nevet!');
         }
