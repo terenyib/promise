@@ -61,7 +61,7 @@ C = (function (MObj, VObj) {
     function processBpResponse(searchResult) {
         console.log("render BP response", searchResult);
         setTimeout(function () {
-            var manager = JSON.stringify(searchResult.results[0].manager).slice(5,14);            
+            var manager = JSON.stringify(searchResult.results[0].manager).slice(5, 14);
             console.log(manager);
             VObj.porgoAlj();
             VObj.kiIras(searchResult);
@@ -74,17 +74,15 @@ C = (function (MObj, VObj) {
     function urlKeszito(keresoSzo) {
         return 'https://w3-services1.w3-969.ibm.com/myw3/unified-profile/v1/search/user?query=' + keresoSzo + '&rows=1&searchConfig=optimized_search';
     }
-        
+
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
         if (keresettNev != '') {
-            makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
-            /*
-            makeAjaxCall(urlKeszito(keresettNev)).then(function(){
-                processBpResponse();
-                makeAjaxCall(urlKeszito(manager)).then(processBpResponse, errorHandler);
-            }, errorHandler);
-            */            
+            //makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
+            makeAjaxCall(urlKeszito(keresettNev)).then(function (result) {
+                //processBpResponse();
+                return makeAjaxCall(urlKeszito(manager));                
+            }).then(processBpResponse, errorHandler);                
         } else {
             alert('Nem írtál be nevet!');
         }
