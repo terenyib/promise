@@ -35,7 +35,7 @@ C = (function (MObj, VObj) {
         var promiseObj = new Promise(function (resolve, reject) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
-            xhr.send();
+            xhr.send();            
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
@@ -46,8 +46,7 @@ C = (function (MObj, VObj) {
                         console.log("xhr failed");
                     }
                 } else {
-                    console.log("xhr processing going on");
-                    VObj.porgoIndulj();
+                    console.log("xhr processing going on");                    
                 }
             }
             console.log("request sent succesfully");
@@ -57,10 +56,7 @@ C = (function (MObj, VObj) {
 
     function processBpResponse(searchResult) {
         console.log("render BP response", searchResult);
-        setTimeout(function () {           
-            VObj.porgoAlj();
-            VObj.kiIras(searchResult);            
-        }, 2000);
+        VObj.kiIras(searchResult);
     }
 
     function errorHandler(statusCode) { console.log("failed with status", statusCode); }
@@ -72,13 +68,16 @@ C = (function (MObj, VObj) {
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
         if (keresettNev != '') {            
+            VObj.porgoIndulj();
             makeAjaxCall(urlKeszito(keresettNev)).then(function (result) {
                 processBpResponse(result);
-                var manager = JSON.stringify(result.results[0].manager).slice(5, 14);
-                return makeAjaxCall(urlKeszito(manager));                
+                return makeAjaxCall(urlKeszito(JSON.stringify(result.results[0].manager).slice(5, 14)));                
             })
             .then(function(newResult) {
-                return processBpResponse(newResult);
+                setTimeout(function () {
+                    VObj.porgoAlj();
+                    return processBpResponse(newResult);
+                }, 2000);   
             })
             .catch(errorHandler);                
         } else {
