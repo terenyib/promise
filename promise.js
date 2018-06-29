@@ -68,11 +68,14 @@ C = (function (MObj, VObj) {
 
     function errorHandler(statusCode) { console.log("failed with status", statusCode); }
 
+    function urlKeszito(keresoSzo) {
+        return 'https://w3-services1.w3-969.ibm.com/myw3/unified-profile/v1/search/user?query=' + keresoSzo + '&rows=1&searchConfig=optimized_search';
+    }
+        
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
         if (keresettNev != '') {
-            var bpUrl = 'https://w3-services1.w3-969.ibm.com/myw3/unified-profile/v1/search/user?query=' + keresettNev + '&rows=1&searchConfig=optimized_search';
-            makeAjaxCall(bpUrl).then(processBpResponse, errorHandler);
+            makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
         } else {
             alert('Nem írtál be nevet!');
         }
