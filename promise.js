@@ -61,8 +61,11 @@ C = (function (MObj, VObj) {
     function processBpResponse(searchResult) {
         console.log("render BP response", searchResult);
         setTimeout(function () {
+            var manager = JSON.stringify(searchResult.results[0].manager).slice(5,14);            
+            console.log(manager);
             VObj.porgoAlj();
             VObj.kiIras(searchResult);
+            return manager;
         }, 2000);
     }
 
@@ -75,11 +78,13 @@ C = (function (MObj, VObj) {
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
         if (keresettNev != '') {
+            makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
+            /*
             makeAjaxCall(urlKeszito(keresettNev)).then(function(){
-                processBpResponse;
-                makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
+                processBpResponse();
+                makeAjaxCall(urlKeszito(manager)).then(processBpResponse, errorHandler);
             }, errorHandler);
-            
+            */            
         } else {
             alert('Nem írtál be nevet!');
         }
