@@ -23,6 +23,10 @@ V = (function () {
             document.getElementById('eredmeny').innerHTML = 'name=' + talalat.results[0].nameFull + '<br />' + 'serial=' + talalat.results[0].uid + '<br />' + 'email=' + talalat.results[0].mail[0] + '<br />' + 'notesmail=' + talalat.results[0].notesEmail;
         },
 
+        porgoIndulj: function() {
+            document.getElementById('spinner').style.display = 'block';
+        },
+
         porgoAlj: function() {
             document.getElementById('spinner').style.display = 'none';
         },
@@ -32,14 +36,14 @@ V = (function () {
 C = (function (MObj, VObj) {
     function makeAjaxCall(url) {
         var promiseObj = new Promise(function (resolve, reject) {
+            VObj.porgoIndulj();
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.send();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        console.log("xhr done successfully");
-                        
+                        console.log("xhr done successfully");                                                
                         resolve(JSON.parse(xhr.responseText));
                     } else {
                         reject(xhr.status);
@@ -51,6 +55,7 @@ C = (function (MObj, VObj) {
             }
             console.log("request sent succesfully");
         });
+        VObj.porgoAlj();
         return promiseObj;
     }
 
