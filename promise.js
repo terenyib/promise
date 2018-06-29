@@ -18,7 +18,7 @@ V = (function () {
         },
 
         kiIras: function (talalat) {
-            document.getElementById('eredmeny').innerHTML += 'name=' + talalat.results[0].nameFull + '<br />' + 'serial=' + talalat.results[0].uid + '<br />' + 'email=' + talalat.results[0].mail[0] + '<br />' + 'notesmail=' + talalat.results[0].notesEmail + '<br />';
+            document.getElementById('eredmeny').innerHTML += 'name=' + talalat.results[0].nameFull + '<br />' + 'serial=' + talalat.results[0].uid + '<br />' + 'email=' + talalat.results[0].mail[0] + '<br />' + 'notesID=' + talalat.results[0].notesEmail + '<br />';
         },
 
         porgoIndulj: function () {
@@ -75,7 +75,8 @@ C = (function (MObj, VObj) {
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
         if (keresettNev != '') {
-            makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
+            makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler)
+            .then(processBpResponse, errorHandler);
         } else {
             alert('Nem írtál be nevet!');
         }
