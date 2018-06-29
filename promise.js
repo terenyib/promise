@@ -2,9 +2,7 @@ var M, V, C;
 
 
 M = (function () {
-
     return {
-
     };
 })();
 
@@ -23,11 +21,11 @@ V = (function () {
             document.getElementById('eredmeny').innerHTML = 'name=' + talalat.results[0].nameFull + '<br />' + 'serial=' + talalat.results[0].uid + '<br />' + 'email=' + talalat.results[0].mail[0] + '<br />' + 'notesmail=' + talalat.results[0].notesEmail;
         },
 
-        porgoIndulj: function() {
+        porgoIndulj: function () {
             document.getElementById('spinner').style.display = 'block';
         },
 
-        porgoAlj: function() {
+        porgoAlj: function () {
             document.getElementById('spinner').style.display = 'none';
         },
     };
@@ -36,14 +34,13 @@ V = (function () {
 C = (function (MObj, VObj) {
     function makeAjaxCall(url) {
         var promiseObj = new Promise(function (resolve, reject) {
-            VObj.porgoIndulj();
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.send();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        console.log("xhr done successfully");                                                
+                        console.log("xhr done successfully");
                         resolve(JSON.parse(xhr.responseText));
                     } else {
                         reject(xhr.status);
@@ -51,11 +48,11 @@ C = (function (MObj, VObj) {
                     }
                 } else {
                     console.log("xhr processing going on");
+                    VObj.porgoIndulj();
                 }
             }
             console.log("request sent succesfully");
         });
-        VObj.porgoAlj();
         return promiseObj;
     }
 
@@ -63,7 +60,10 @@ C = (function (MObj, VObj) {
 
     function processBpResponse(searchResult) {
         console.log("render BP response", searchResult);
-        VObj.kiIras(searchResult);
+        setTimeout(function () {
+            VObj.porgoAlj();
+            VObj.kiIras(searchResult);
+        }, 2000);
     }
 
     function errorHandler(statusCode) { console.log("failed with status", statusCode); }
