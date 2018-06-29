@@ -1,6 +1,5 @@
 var M, V, C;
 
-
 M = (function () {
     return {
     };
@@ -54,18 +53,13 @@ C = (function (MObj, VObj) {
             console.log("request sent succesfully");
         });
         return promiseObj;
-    }
-
-    //function processUserDetailsResponse(userData) { console.log("render user details", userData); }
+    }   
 
     function processBpResponse(searchResult) {
         console.log("render BP response", searchResult);
-        setTimeout(function () {
-            var manager = JSON.stringify(searchResult.results[0].manager).slice(5, 14);
-            console.log(manager);
+        setTimeout(function () {           
             VObj.porgoAlj();
-            VObj.kiIras(searchResult);
-            return manager;
+            VObj.kiIras(searchResult);            
         }, 2000);
     }
 
@@ -77,16 +71,19 @@ C = (function (MObj, VObj) {
 
     function bluepagesKereses() {
         var keresettNev = VObj.nevBeolvasas();
-        if (keresettNev != '') {
-            //makeAjaxCall(urlKeszito(keresettNev)).then(processBpResponse, errorHandler);
+        if (keresettNev != '') {            
             makeAjaxCall(urlKeszito(keresettNev)).then(function (result) {
-                //processBpResponse();
+                processBpResponse(result);
+                var manager = JSON.stringify(result.results[0].manager).slice(5, 14);
                 return makeAjaxCall(urlKeszito(manager));                
-            }).then(processBpResponse, errorHandler);                
+            })
+            .then(function(newResult) {
+                return processBpResponse(newResult);
+            })
+            .catch(errorHandler);                
         } else {
             alert('Nem írtál be nevet!');
-        }
-        //VObj.bevitelimezoTorles();
+        }        
     }
 
     return {
