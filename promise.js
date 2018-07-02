@@ -16,26 +16,32 @@ V = (function () {
             document.getElementById('nev').value = '';
         },
 
-        kiIras: function (talalat) {
-            document.getElementById('eredmeny').innerHTML += 'name=' + talalat.results[0].nameFull + '<br />' + 'serial=' + talalat.results[0].uid + '<br />' + 'email=' + talalat.results[0].mail[0] + '<br />' + 'notesID=' + talalat.results[0].notesEmail + '<br />';
+        kiIras: function (mezo, kiirando) {
+            document.getElementById(mezo).innerHTML = kiirando;
         },
 
-        porgoIndulj: function () {
-            document.getElementById('spinner').style.display = 'block';
+        tablaTorles: function (tabla) {
+            for (var i = 0; i < document.getElementById(tabla).getElementsByTagName("tr").length; i++) {
+                document.getElementById(tabla).rows[i].cells[1].innerHTML = '';
+            }
         },
 
-        porgoAlj: function () {
-            document.getElementById('spinner').style.display = 'none';
+        porgoIndulj: function (spinnerCount) {
+            document.getElementById('spinner' + spinnerCount).style.display = 'block';
+        },
+
+        porgoAlj: function (spinnerCount) {
+            document.getElementById('spinner' + spinnerCount).style.display = 'none';
         },
     };
 })();
 
 C = (function (MObj, VObj) {
     function makeAjaxCall(url) {
-        var promiseObj = new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
-            xhr.send();            
+            xhr.send();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
@@ -46,17 +52,20 @@ C = (function (MObj, VObj) {
                         console.log("xhr failed");
                     }
                 } else {
-                    console.log("xhr processing going on");                    
+                    console.log("xhr processing going on");
                 }
             }
             console.log("request sent succesfully");
         });
-        return promiseObj;
-    }   
+    }
 
-    function processBpResponse(searchResult) {
-        console.log("render BP response", searchResult);
-        VObj.kiIras(searchResult);
+    function processBpResponse(type, searchResult) {
+        var empData = [searchResult.results[0].nameFull, searchResult.results[0].uid, searchResult.results[0].mail[0], searchResult.results[0].notesEmail];
+        var empDivList = ['FullName', 'Serial', 'Email', 'NotesID'];
+        for (var i = 0; i < empData.length; i++) {
+            VObj.kiIras(type + empDivList[i], empData[i]);
+        }
+        console.log("render BP response", type, empData);
     }
 
     function errorHandler(statusCode) { console.log("failed with status", statusCode); }
@@ -66,23 +75,27 @@ C = (function (MObj, VObj) {
     }
 
     function bluepagesKereses() {
+        VObj.tablaTorles('eredmenyTablaEmp');
+        VObj.tablaTorles('eredmenyTablaMan');
         var keresettNev = VObj.nevBeolvasas();
-        if (keresettNev != '') {            
-            VObj.porgoIndulj();
+        if (keresettNev) {
+            VObj.porgoIndulj('1');
             makeAjaxCall(urlKeszito(keresettNev)).then(function (result) {
-                processBpResponse(result);
-                return makeAjaxCall(urlKeszito(JSON.stringify(result.results[0].manager).slice(5, 14)));                
+                processBpResponse('emp', result);
+                VObj.porgoAlj('1');
+                VObj.porgoIndulj('2');
+                return makeAjaxCall(urlKeszito(JSON.stringify(result.results[0].manager).split(',')[0].split('=')[1]));
             })
-            .then(function(newResult) {
-                setTimeout(function () {
-                    VObj.porgoAlj();
-                    return processBpResponse(newResult);
-                }, 2000);   
-            })
-            .catch(errorHandler);                
+                .then(function (newResult) {
+                    setTimeout(function () {
+                        VObj.porgoAlj('2');
+                        return processBpResponse('man', newResult);
+                    }, 2000);
+                })
+                .catch(errorHandler);
         } else {
             alert('Nem írtál be nevet!');
-        }        
+        }
     }
 
     return {

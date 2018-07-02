@@ -1,18 +1,57 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Promise gyakorlás</title>
-		<link rel="stylesheet" type="text/css" href="promise.css">
-	</head>
-	<body>
-		<div id="doboz" class="header">
-			<h1>BluePages adatok lekérdezése</h1>
-			<input type="text" id="nev" placeholder="kit keresünk?">
-			<span id="keresgomb">Keresés</span>
-        </div>
-		<div id="eredmeny"></div>
-		<div class="loader" id="spinner" style="display:none;"></div>
-		<script src="promise.js"></script>	
-	</body>
+<head>
+	<meta charset="utf-8">
+	<title>Promise gyakorlás</title>
+	<link rel="stylesheet" type="text/css" href="promise.css">
+</head>
+<body>
+	<div id="doboz" class="header">
+		<h1>BluePages adatok lekérdezése</h1>
+		<input type="text" id="nev" placeholder="kit keresünk?">
+		<span id="keresgomb">Keresés</span>
+	</div>
+	<div id="eredmeny">
+		<div class="loader" id="spinner1" style="display:none;"></div>
+		<table id="eredmenyTablaEmp">
+			<tr>
+				<td>Employee name:</td>
+				<td id="empFullName"></td>
+			</tr>
+			<tr>
+				<td>Employee serial:</td>
+				<td id="empSerial"></td>
+			</tr>
+			<tr>
+				<td>Employee email:</td>
+				<td id="empEmail"></td>
+			</tr>
+			<tr>
+				<td>Employee NotesID:</td>
+				<td id="empNotesID"></td>
+			</tr>
+
+		</table>
+		<div class="loader" id="spinner2" style="display:none;"></div>
+		<table id="eredmenyTablaMan">
+			<tr>
+				<td>Manager name:</td>
+				<td id="manFullName"></td>
+			</tr>
+			<tr>
+				<td>Manager serial:</td>
+				<td id="manSerial"></td>
+			</tr>
+			<tr>
+				<td>Manager email:</td>
+				<td id="manEmail"></td>
+			</tr>
+			<tr>
+				<td>Manager NotesID:</td>
+				<td id="manNotesID"></td>
+			</tr>
+		</table>
+	</div>
+	<script src="promise.js"></script>
+</body>
 </html>
